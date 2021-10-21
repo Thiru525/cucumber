@@ -10,27 +10,37 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import com.telecom.objectrepository.AddTariffPlanPage;
+import com.telecom.resources.CommmonActions;
+
+import cucumber.api.java.After;
+import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.cucumber.datatable.DataTable;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-public class AddTariffPlanSteps {
-	static WebDriver driver;
+public class AddTariffPlanSteps extends CommmonActions {
+	CommmonActions com = new CommmonActions();
+	AddTariffPlanPage atp = new AddTariffPlanPage();
+
+	
+	
 
 	@Given("user launche demo telecom application")
 	public void user_launche_demo_telecom_application() {
-		WebDriverManager.chromedriver().setup();
-		driver = new ChromeDriver();
-		driver.get("http://www.demo.guru99.com/telecom/index.html");
-		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		
+		
 	}
 
 	@Given("user click add tariff plan button")
 	public void user_click_add_tariff_plan_button() {
-		driver.findElement(By.xpath("(//a[contains(text(),'Add Tariff Plan')])[2]")).click();
+		com.addTariffPlan(atp.getAddtariffplanbutton());
+		
+		//com.addTariffPlan(driver.findElement(By.xpath("(//a[contains(text(),'Add Tariff Plan')])[2]")));
+		//driver.findElement(By.xpath("(//a[contains(text(),'Add Tariff Plan')])[2]")).click();
+		
 	}
 
 	// 1 dimensional list
@@ -38,14 +48,23 @@ public class AddTariffPlanSteps {
 	@When("user fill all the fields by one dimensional list concept")
 	public void user_fill_all_the_fields_by_one_dimensional_list_concept(DataTable dataTable) {
 		List<String> amount = dataTable.asList(String.class);
+		
+		com.insertText(atp.getRental(), amount.get(0));
+		com.insertText(atp.getLocalmin(), amount.get(1)); 
+		com.insertText(atp.getIntermin(), amount.get(2));
+		com.insertText(atp.getSmspack(), amount.get(3));
+		com.insertText(atp.getMincharge(), amount.get(4));
+		com.insertText(atp.getIntercharge(), amount.get(5));
+		com.insertText(atp.getSmscharge(), amount.get(6));
+		
 
-		driver.findElement(By.id("rental1")).sendKeys(amount.get(0));
-		driver.findElement(By.id("local_minutes")).sendKeys(amount.get(1));
-		driver.findElement(By.id("inter_minutes")).sendKeys(amount.get(2));
-		driver.findElement(By.id("sms_pack")).sendKeys(amount.get(3));
-		driver.findElement(By.id("minutes_charges")).sendKeys(amount.get(4));
-		driver.findElement(By.id("inter_charges")).sendKeys(amount.get(5));
-		driver.findElement(By.id("sms_charges")).sendKeys(amount.get(6));
+//		driver.findElement(By.id("rental1")).sendKeys(amount.get(0));
+//		driver.findElement(By.id("local_minutes")).sendKeys(amount.get(1));
+//		driver.findElement(By.id("inter_minutes")).sendKeys(amount.get(2));
+//		driver.findElement(By.id("sms_pack")).sendKeys(amount.get(3));
+//		driver.findElement(By.id("minutes_charges")).sendKeys(amount.get(4));
+//		driver.findElement(By.id("inter_charges")).sendKeys(amount.get(5));
+//		driver.findElement(By.id("sms_charges")).sendKeys(amount.get(6));
 	}
 
 	// 1 dimensional map
@@ -78,6 +97,8 @@ public class AddTariffPlanSteps {
 
 	@When("user click  the submit button")
 	public void user_click_the_submit_button() {
+		
+		
 		driver.findElement(By.xpath("//input[@type='submit']")).click();
 
 	}
@@ -95,7 +116,7 @@ public class AddTariffPlanSteps {
 		String textmsg = confirmNote.getText();
 		System.out.println(textmsg);
 		Assert.assertEquals("Congratulation you add Tariff Plan", textmsg);
-		driver.quit();
+		
 	}
 
 }
